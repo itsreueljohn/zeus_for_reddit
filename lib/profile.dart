@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:flutter_user_agent/flutter_user_agent.dart';
-import 'package:zeus_for_reddit/main.dart';
 import 'dart:async';
 import 'package:draw/draw.dart';
-import 'dart:io';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -17,7 +15,7 @@ class _ProfilePage extends State<ProfilePage> {
   static String name;
   static String user;
 
-  static var auth_url;
+  static var authUrl;
 
   final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
@@ -84,15 +82,15 @@ class _ProfilePage extends State<ProfilePage> {
     });
   }
 
- static final Uri configUri = Uri.parse("https://mojoman11.github.io/Zeus-for-Reddit/");
+ static final Uri configUri = Uri.parse("https://mojoman11.github.io/");
   static var reddit;
 
-  Future<void> main() async {
+  Future<void> main() async{
     String userAgent;
-
+    //TODO:Fix async to access userAgent before executing URL
     //await FlutterUserAgent.init(force: true);
-    //userAgent = FlutterUserAgent.userAgent;
-    //FlutterUserAgent.release();
+    // userAgent = FlutterUserAgent.userAgent;
+    // FlutterUserAgent.release();
 
     userAgent ="dartapp" ;
 
@@ -108,12 +106,12 @@ class _ProfilePage extends State<ProfilePage> {
     // Build the URL used for authentication. See `WebAuthenticator`
     // documentation for parameters.
     List<String> scopes = ["identity"];
-    auth_url = reddit.auth.url(scopes, "abcd");
-    print(auth_url.toString());
+    authUrl = reddit.auth.url(scopes, "abcd");
+    print(authUrl.toString());
 
 
     // ...
-    // Complete authentication at `auth_url` in the browser and retrieve
+    // Complete authentication at `authUrl` in the browser and retrieve
     // the `code` query parameter from the redirect URL.
     // ...
 
@@ -131,7 +129,7 @@ class _ProfilePage extends State<ProfilePage> {
     main();
 
     return new WebviewScaffold(
-        url: auth_url.toString(),
+        url: authUrl.toString(),
         appBar: new AppBar(
           title: new Text("Login to reddit..."),
         ));

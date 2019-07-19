@@ -12,14 +12,12 @@
 import 'package:flutter/material.dart';
 import 'package:zeus_for_reddit/feed.dart';
 import 'package:zeus_for_reddit/create.dart';
-import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'search.dart';
 import 'profile.dart';
 
 void main() => runApp(ZFR());
 /// This Widget is the main application widget.
 class ZFR extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
 
@@ -28,6 +26,7 @@ class ZFR extends StatelessWidget {
       );
   }
 }
+
 
 class MainWidget extends StatefulWidget{
   @override

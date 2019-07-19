@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<Null> _onRefresh() {
     Completer<Null> completer = new Completer<Null>();
-    Timer timer = new Timer(new Duration(seconds: 3), () {
+      new Timer(new Duration(seconds: 3), () {
       completer.complete();
     });
     return completer.future;
@@ -66,11 +66,11 @@ class _TodoItemWidgetState extends State<TodoItemWidget> {
               children: <Widget>[
                 FlatButton(
                   child: const Text('BUY TICKETS'),
-                  onPressed: () { /* ... */ },
+                  onPressed:_onTap,
                 ),
                 FlatButton(
                   child: const Text('LISTEN'),
-                  onPressed: () { /* ... */ },
+                  onPressed: _onTap,
                 ),
               ],
             ),
