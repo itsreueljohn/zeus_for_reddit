@@ -12,25 +12,38 @@
 import 'package:flutter/material.dart';
 import 'package:zeus_for_reddit/feed.dart';
 import 'package:zeus_for_reddit/create.dart';
+import 'package:zeus_for_reddit/authenticator.dart';
 import 'search.dart';
 import 'profile.dart';
+import 'package:flutter_user_agent/flutter_user_agent.dart';
+import 'package:draw/draw.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
+
 
 void main() => runApp(ZFR());
 /// This Widget is the main application widget.
 class ZFR extends StatelessWidget {
+  static var reddit;
+  static Uri authUrl;
+  static final Uri configUri = Uri.parse("https://mojoman11.github.io/");
+  static String userAgent;
+
+
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
         home: MainWidget(),
       );
   }
+
 }
 
 
 class MainWidget extends StatefulWidget{
   @override
   _MainWidgetState createState() => _MainWidgetState();
+
 
 }
 
@@ -56,6 +69,55 @@ class _MainWidgetState extends State<MainWidget> {
   final PageStorageBucket bucket = PageStorageBucket();
 
   int _selectedIndex = 0;
+
+  @override
+  void initState(){
+    getUserAgent();
+   // sleep(new Duration(seconds: 4));
+    initReddit();
+    super.initState();
+  }
+
+
+
+static Future<void> initReddit()async{
+  //TODO: return -1 for error?
+  String userAgent = ZFR.userAgent;
+  String clientId = "6ZvSitmYnojUdw";
+  print("B4 the LOAD");
+  var credentialsJson =  await loadCredentials();
+  print("B4 the IF");
+  print(credentialsJson.toString());
+  //TODO:PR for no type for credentialsJson
+  if(credentialsJson==null) {
+    print("in the IF");
+    ZFR.reddit = Reddit.createInstalledFlowInstance(
+        clientId: clientId, userAgent: ZFR.userAgent, redirectUri: ZFR.configUri);
+    List<String> scopes = ["identity","mysubreddits","flair","read","history"];
+    //TODO: change the random string and verify
+    ZFR.authUrl = ZFR.reddit.auth.url(scopes, "abcd");
+    print('authURL done ${ZFR.authUrl.toString()}');
+
+  }else{
+    print("IN ELSE");
+    ZFR.reddit = Reddit.restoreAuthenticatedInstance(credentialsJson.toString(),clientId:clientId,userAgent: ZFR.userAgent,configUri: ZFR.configUri);
+   print("Client restored!");
+  }
+}
+
+static Future<String> loadCredentials ()async{
+  final prefs = await SharedPreferences.getInstance();
+  String a =prefs.getString('credentials') ?? null;
+  print(a);
+  return a;
+}
+
+  Future<void> getUserAgent()async{
+    await FlutterUserAgent.init();
+    ZFR.userAgent=FlutterUserAgent.userAgent;
+    print(ZFR.userAgent);
+    FlutterUserAgent.release();
+  }
 
   @override
   Widget build(BuildContext context) {
