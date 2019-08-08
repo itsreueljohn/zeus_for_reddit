@@ -18,6 +18,7 @@ import 'profile.dart';
 import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:draw/draw.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zeus_for_reddit/settings.dart';
 import 'dart:io';
 
 
@@ -28,6 +29,7 @@ class ZFR extends StatelessWidget {
   static Uri authUrl;
   static final Uri configUri = Uri.parse("https://mojoman11.github.io/");
   static String userAgent;
+  static Redditor redditor;
 
 
   @override
@@ -64,7 +66,7 @@ class _MainWidgetState extends State<MainWidget> {
     )
   ];
 
-  final List pages = [HomePage(),SearchPage(), NewPostPage(), ProfilePage()];
+  final List pages = [HomePage(),SearchPage(), NewPostPage(), SettingsPage()];
   Widget currentPage = HomePage();
   final PageStorageBucket bucket = PageStorageBucket();
 
@@ -101,6 +103,8 @@ static Future<void> initReddit()async{
   }else{
     print("IN ELSE");
     ZFR.reddit = Reddit.restoreAuthenticatedInstance(credentialsJson.toString(),clientId:clientId,userAgent: ZFR.userAgent,configUri: ZFR.configUri);
+    // ZFR.redditor = await ZFR.reddit.user.me();
+    //print(ZFR.redditor.displayName);
    print("Client restored!");
   }
 }
@@ -111,6 +115,12 @@ static Future<String> loadCredentials ()async{
   print(a);
   return a;
 }
+
+  static Future<void> removeCredentials ()async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("credentials");
+  }
+
 
   Future<void> getUserAgent()async{
     await FlutterUserAgent.init();

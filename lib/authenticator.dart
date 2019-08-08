@@ -57,7 +57,7 @@ class _AuthenticatorPage extends State<AuthenticatorPage> {
 
       if(ZFR.reddit.user.me()!=null){
         //TODO:remove to write
-        //await writeCredentials(ZFR.reddit.auth.credentials.toJson());
+        await writeCredentials(ZFR.reddit.auth.credentials.toJson());
         print("WROTE SUCESSFULLY");
         Navigator.pop(context,true);
       }else{
@@ -83,7 +83,6 @@ class _AuthenticatorPage extends State<AuthenticatorPage> {
     super.initState();
 
   }
-
 
   Future<void> writeCredentials (String credentials)async{
     final prefs = await SharedPreferences.getInstance();
